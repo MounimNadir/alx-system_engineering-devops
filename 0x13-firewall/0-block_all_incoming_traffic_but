@@ -1,33 +1,13 @@
 #!/usr/bin/env bash
-# Double the number of webservers
+#Double the number of webservers
 
-# Check if ufw is installed
-command -v ufw >/dev/null 2>&1 || { echo >&2 "ufw is not installed. Aborting."; exit 1; }
-
-# Update package lists and install ufw
 sudo apt-get update
 sudo apt-get install ufw -y
-
-# Display current firewall status
 sudo ufw status verbose
-
-# Set default firewall rules
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-
-# Allow SSH, HTTP, and HTTPS traffic
 sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
-
-# Enable the firewall
-read -p "Do you want to enable the firewall? [y/N]: " enable_firewall
-if [[ $enable_firewall =~ ^[Yy]$ ]]; then
-    sudo ufw enable
-else
-    echo "Firewall not enabled."
-fi
-
-# Display final firewall status
+echo "y" | sudo ufw enable
 sudo ufw status verbose
-
