@@ -1,11 +1,19 @@
 #!/usr/bin/python3
 """Retrieve and display employee's TODO list progress"""
 
-import sys
 import requests
+import sys
 
-def fetch_todo_progress(employee_id):
-    """Fetch and display employee's TODO list progress"""
+def main():
+    """Main function to retrieve and display employee's TODO list progress"""
+    # Validate command-line arguments
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <employee_id>")
+        sys.exit(1)
+
+    employee_id = sys.argv[1]
+
+    # Define base URL
     base_url = 'https://jsonplaceholder.typicode.com/'
 
     # Fetch user data
@@ -13,36 +21,25 @@ def fetch_todo_progress(employee_id):
     user_data = user_response.json()
     if 'name' not in user_data:
         print("User not found.")
-        return
-
+        sys.exit(1)
     employee_name = user_data["name"]
 
     # Fetch user's todos
     todos_response = requests.get(f'{base_url}todos?userId={employee_id}')
     todos_data = todos_response.json()
 
+    # Fetch completed todos
+    completed_response = requests.get(f'{base_url}todos?userId={employee_id}&completed=true')
+    completed_todos = completed_response.json()
+
     # Calculate progress
     total_tasks = len(todos_data)
-    completed_tasks = sum(1 for task in todos_data if task["completed"])
+    completed_tasks = len(completed_todos)
 
     # Print progress
     print(f'Employee {employee_name} is done with tasks ({completed_tasks}/{total_tasks}):')
-    for task in todos_data:
-        if task["completed"]:
-            print(f'\t{task["title"]}')
+    for task in completed_todos:
+        print(f'\t{task["title"]}')
 
 if __name__ == "__main__":
-    # Validate command-line arguments
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = sys.argv[1]
-    try:
-        employee_id = int(employee_id)
-    except ValueError:
-        print("Employee ID must be an integer.")
-        sys.exit(1)
-
-    fetch_todo_progress(employee_id)
-
+    main()
