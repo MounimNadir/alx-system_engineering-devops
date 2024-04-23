@@ -8,8 +8,9 @@ def main():
     """ def com """
     id = sys.argv[1]
     url = f'https://jsonplaceholder.typicode.com/'
-    users = f'users?id={id}'
-    todos = f'todos?userId={id}'
+    user_id = userData[0].get("id")
+    users = f'users/{user_id}'
+    todos = f'todos?userId={user_id}'
     done = f'{todos}&completed=true'
     notDone = f'{todos}&completed=false'
     userData = requests.get(f'{url}{users}').json()
