@@ -1,5 +1,6 @@
 # Postmortem: Unexpected Downtime on Web Service
 
+![img](https://github.com/MounimNadir/alx-system_engineering-devops/assets/138841203/6bc1282b-dcbf-4b34-863c-e92734710d55)
 
 ## Issue Summary
 
